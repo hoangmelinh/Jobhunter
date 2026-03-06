@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turkraft.springfilter.boot.Filter;
@@ -22,10 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 import vn.hoangmelinh.jobhunter.domain.Company;
-import vn.hoangmelinh.jobhunter.domain.dto.ResultPaginationDTO;
+import vn.hoangmelinh.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoangmelinh.jobhunter.service.CompanyService;
 
 @RestController
+@RequestMapping("/api/v1")
 public class CompanyController {
     
 

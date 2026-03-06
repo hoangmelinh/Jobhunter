@@ -8,7 +8,6 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,7 +46,7 @@ public class SecurityConfiguration {
             .csrf(c -> c.disable())
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(
-                authz -> authz.requestMatchers("/", "/login").permitAll().anyRequest().authenticated()
+                authz -> authz.requestMatchers("/", "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll().anyRequest().authenticated()
             )
             .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
             .authenticationEntryPoint(customAuthenticationEntryPoint))
@@ -71,7 +70,7 @@ public class SecurityConfiguration {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("");
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("hoangmelinh");
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("permission");
         JwtAuthenticationConverter jwtAuthenticationConverter = new
         JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
