@@ -2,12 +2,16 @@ package vn.hoangmelinh.jobhunter.domain.response;
 
 import java.time.Instant;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.hoangmelinh.jobhunter.util.constant.GenderEnum;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResCreateUserDTO {
     private long id;
     private String name;
@@ -16,4 +20,14 @@ public class ResCreateUserDTO {
     private GenderEnum gender;
     private String address;
     private Instant createdAt;
+    private CompanyUser company;
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CompanyUser {
+        private long id;
+        private String name;
+    }
 }

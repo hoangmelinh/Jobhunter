@@ -8,21 +8,29 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.hoangmelinh.jobhunter.domain.Company;
+import vn.hoangmelinh.jobhunter.domain.User;
 import vn.hoangmelinh.jobhunter.domain.response.ResUserDTO;
 import vn.hoangmelinh.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoangmelinh.jobhunter.repository.CompanyRepository;
+import vn.hoangmelinh.jobhunter.repository.UserRepository;
 
 @Service
 public class CompanyService {
-    
-    private final CompanyRepository companyRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    private final CompanyRepository companyRepository;
+    private final UserRepository userRepository;
+
+    public CompanyService(CompanyRepository companyRepository, UserRepository userRepository) {
         this.companyRepository = companyRepository;
+        this.userRepository = userRepository;
     }
 
     public Company handleCreateCompany(Company company) {
         return this.companyRepository.save(company);
+    }
+
+    public Optional<Company> fetchConpanyById(Long id) {
+        return this.companyRepository.findById(id);
     }
 
     public ResultPaginationDTO handleGetCompany(Specification<Company> spec, Pageable pageable) {
@@ -36,15 +44,22 @@ public class CompanyService {
 
         mt.setPages(companyPage.getTotalPages());
         mt.setTotal(companyPage.getTotalElements());
-        
+
         resultPaginationDTO.setMeta(mt);
         resultPaginationDTO.setResult(companyPage.getContent());
 
         return resultPaginationDTO;
-        
+
     }
 
     public void handleDeleteCompany(long id) {
+        Optional<Company> companyOptional = this.companyRepository.findById(id);
+        if (companyOptional.isPresent()) {
+            Company com = companyOptional.get();
+            // fetch all user belong this company
+            List<User> userList = com.getUsers();
+            this.userRepository.deleteAll(userList);
+        }
         this.companyRepository.deleteById(id);
     }
 
@@ -61,5 +76,5 @@ public class CompanyService {
         }
         return null;
     }
-    
+
 }
