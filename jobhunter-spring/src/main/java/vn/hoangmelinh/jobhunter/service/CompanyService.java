@@ -9,8 +9,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.hoangmelinh.jobhunter.domain.Company;
 import vn.hoangmelinh.jobhunter.domain.User;
-import vn.hoangmelinh.jobhunter.domain.response.ResUserDTO;
 import vn.hoangmelinh.jobhunter.domain.response.ResultPaginationDTO;
+import vn.hoangmelinh.jobhunter.domain.response.User.ResUserDTO;
 import vn.hoangmelinh.jobhunter.repository.CompanyRepository;
 import vn.hoangmelinh.jobhunter.repository.UserRepository;
 

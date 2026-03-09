@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 
 import vn.hoangmelinh.jobhunter.domain.Company;
 import vn.hoangmelinh.jobhunter.domain.User;
-import vn.hoangmelinh.jobhunter.domain.response.ResCreateUserDTO;
-import vn.hoangmelinh.jobhunter.domain.response.ResCreateUserDTO.CompanyUser;
-import vn.hoangmelinh.jobhunter.domain.response.ResUpdateUserDTO;
-import vn.hoangmelinh.jobhunter.domain.response.ResUserDTO;
 import vn.hoangmelinh.jobhunter.domain.response.ResultPaginationDTO;
+import vn.hoangmelinh.jobhunter.domain.response.User.ResCreateUserDTO;
+import vn.hoangmelinh.jobhunter.domain.response.User.ResUpdateUserDTO;
+import vn.hoangmelinh.jobhunter.domain.response.User.ResUserDTO;
+import vn.hoangmelinh.jobhunter.domain.response.User.ResCreateUserDTO.CompanyUser;
 import vn.hoangmelinh.jobhunter.repository.UserRepository;
 
 @Service

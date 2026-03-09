@@ -1,4 +1,4 @@
-package vn.hoangmelinh.jobhunter.domain.response;
+package vn.hoangmelinh.jobhunter.domain.response.User;
 
 import java.time.Instant;
 
@@ -12,22 +12,23 @@ import vn.hoangmelinh.jobhunter.util.constant.GenderEnum;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResCreateUserDTO {
+public class ResUpdateUserDTO {
+
     private long id;
     private String name;
-    private String email;
     private int age;
     private GenderEnum gender;
     private String address;
-    private Instant createdAt;
-    private CompanyUser company;
+    private Instant updatedAt;
+    private ComanyUser company;
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class CompanyUser {
+    public static class ComanyUser {
         private long id;
         private String name;
     }
+
 }

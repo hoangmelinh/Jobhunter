@@ -9,11 +9,8 @@ import vn.hoangmelinh.jobhunter.util.error.IdInvalidException;
 public class HelloController {
 
     @GetMapping("/")
-    public String getHelloWorld() throws IdInvalidException {
+    public String getHelloWorld() {
 
-        if(true) {
-            throw new IdInvalidException("Lỗi rồi");
-        }
         return "Hello World (HoangMeLinh)";
     }
 }

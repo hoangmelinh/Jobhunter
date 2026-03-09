@@ -1,4 +1,4 @@
-package vn.hoangmelinh.jobhunter.domain.response;
+package vn.hoangmelinh.jobhunter.domain.response.User;
 
 import java.time.Instant;
 
