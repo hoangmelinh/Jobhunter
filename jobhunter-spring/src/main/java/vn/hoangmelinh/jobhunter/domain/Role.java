@@ -3,20 +3,19 @@ package vn.hoangmelinh.jobhunter.domain;
 import java.time.Instant;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.ManyToAny;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -25,51 +24,34 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import vn.hoangmelinh.jobhunter.util.SecurityUtil;
-import vn.hoangmelinh.jobhunter.util.constant.GenderEnum;
 
 @Entity
+@Table(name = "roles")
 @Setter
 @Getter
-@Table(name = "users")
-public class User {
-
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "name must not be blank")
+
+    @NotBlank(message = "name không được để trống")
     private String name;
-    @NotBlank(message = "email must not be blank")
-    private String email;
-    @NotBlank(message = "password must not be blank")
-    private String password;
-    private String address;
-    private int age;
-    @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GTM+7")
+    private String description;
+    private boolean active;
     private Instant createdAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GTM+7")
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "roles" })
+    @JoinTable(name = "permission_role", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private List<Permission> permissions;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Resume> resumes;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    private List<User> users;
 
     @PrePersist
     public void handleBeforeCreate() {

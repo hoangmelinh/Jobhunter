@@ -25,11 +25,11 @@ import jakarta.validation.Valid;
 import vn.hoangmelinh.jobhunter.domain.Company;
 import vn.hoangmelinh.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoangmelinh.jobhunter.service.CompanyService;
+import vn.hoangmelinh.jobhunter.util.annotation.ApiMessage;
 
 @RestController
 @RequestMapping("/api/v1")
 public class CompanyController {
-    
 
     private final CompanyService companyService;
 
@@ -38,22 +38,30 @@ public class CompanyController {
     }
 
     @PostMapping("/companies")
+    @ApiMessage("Create company")
     public ResponseEntity<Company> createCompany(@Valid @RequestBody Company company) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(this.companyService.handleCreateCompany(company));
     }
 
     @GetMapping("/companies")
+    @ApiMessage("Fetch All Companies")
     public ResponseEntity<ResultPaginationDTO> getCompany(
-       @Filter Specification<Company> spec, 
-       Pageable pageable 
-    ) {
-        
+            @Filter Specification<Company> spec,
+            Pageable pageable) {
+
         return ResponseEntity.status(HttpStatus.OK).body(this.companyService.handleGetCompany(spec, pageable));
     }
 
-    @PutMapping("/companies/{id}")
-    public ResponseEntity<Company> updateCompany(@PathVariable("id") long id, @Valid @RequestBody Company company) {
+    @GetMapping("/companies/{id}")
+    @ApiMessage("Fetch company by id")
+    public ResponseEntity<?> getCompanyById(@PathVariable("id") long id) {
+        Optional comOptional = this.companyService.handleGetCompanyById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(comOptional.get());
+    }
+
+    @PutMapping("/companies")
+    public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company company) {
         Company currentCompany = this.companyService.handleUpdateCompany(company);
         return ResponseEntity.ok(currentCompany);
     }

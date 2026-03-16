@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.hoangmelinh.jobhunter.domain.Company;
+import vn.hoangmelinh.jobhunter.domain.Role;
 import vn.hoangmelinh.jobhunter.domain.User;
 import vn.hoangmelinh.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoangmelinh.jobhunter.domain.response.User.ResCreateUserDTO;
@@ -22,17 +23,24 @@ import vn.hoangmelinh.jobhunter.repository.UserRepository;
 public class UserService {
     private final UserRepository userRepository;
     private final CompanyService companyService;
+    private final RoleService roleService;
 
-    public UserService(UserRepository userRepository, CompanyService companyService) {
+    public UserService(UserRepository userRepository, CompanyService companyService, RoleService roleService) {
         this.userRepository = userRepository;
         this.companyService = companyService;
+        this.roleService = roleService;
     }
 
     public User handleCreateUser(User user) {
 
         if (user.getCompany() != null) {
-            Optional<Company> companyOptional = this.companyService.fetchConpanyById(user.getCompany().getId());
+            Optional<Company> companyOptional = this.companyService.fetchCompanyById(user.getCompany().getId());
             user.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
+        }
+
+        if (user.getRole() != null) {
+            Role roleOptional = this.roleService.fetchById(user.getRole().getId());
+            user.setRole(roleOptional != null ? roleOptional : null);
         }
 
         return this.userRepository.save(user);
@@ -71,7 +79,7 @@ public class UserService {
 
     public User handleUpdateUser(User user) {
         Optional<User> currentUserOptional = this.userRepository.findById(user.getId());
-        Optional<Company> companyOptional = this.companyService.fetchConpanyById(user.getCompany().getId());
+        Optional<Company> companyOptional = this.companyService.fetchCompanyById(user.getCompany().getId());
         if (currentUserOptional.isPresent()) {
             User currentUser = currentUserOptional.get();
             currentUser.setName(user.getName());
@@ -79,8 +87,15 @@ public class UserService {
             currentUser.setGender(user.getGender());
             currentUser.setAddress(user.getAddress());
 
+            // check Company
             if (companyOptional.isPresent()) {
                 currentUser.setCompany(companyOptional.get());
+            }
+
+            // check Role
+            if (user.getRole() != null) {
+                Role roleOptional = this.roleService.fetchById(user.getRole().getId());
+                currentUser.setRole(roleOptional);
             }
 
             this.userRepository.save(currentUser);
@@ -121,6 +136,7 @@ public class UserService {
     public ResUserDTO convertToRestUserDTO(User user) {
         ResUserDTO res = new ResUserDTO();
         ResUserDTO.CompanyUser companyUser = new ResUserDTO.CompanyUser();
+        ResUserDTO.RoleUser roleUser = new ResUserDTO.RoleUser();
 
         res.setId(user.getId());
         res.setEmail(user.getEmail());
@@ -135,6 +151,12 @@ public class UserService {
             companyUser.setId(user.getCompany().getId());
             companyUser.setName(user.getCompany().getName());
             res.setCompany(companyUser);
+        }
+
+        if (user.getRole() != null) {
+            roleUser.setId(user.getRole().getId());
+            roleUser.setName(user.getRole().getName());
+            res.setRole(roleUser);
         }
 
         return res;

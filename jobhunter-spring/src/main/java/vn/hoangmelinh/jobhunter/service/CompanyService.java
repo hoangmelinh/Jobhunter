@@ -29,7 +29,7 @@ public class CompanyService {
         return this.companyRepository.save(company);
     }
 
-    public Optional<Company> fetchConpanyById(Long id) {
+    public Optional<Company> fetchCompanyById(Long id) {
         return this.companyRepository.findById(id);
     }
 
@@ -75,6 +75,10 @@ public class CompanyService {
             return currentCompany;
         }
         return null;
+    }
+
+    public Optional<Company> handleGetCompanyById(long id) {
+        return this.companyRepository.findById(id);
     }
 
 }

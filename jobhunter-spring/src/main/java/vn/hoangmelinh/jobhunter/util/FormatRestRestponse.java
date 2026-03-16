@@ -8,6 +8,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import org.springframework.core.io.Resource;
 
 import jakarta.servlet.http.HttpServletResponse;
 import vn.hoangmelinh.jobhunter.domain.response.RestResponse;
@@ -28,25 +29,24 @@ public class FormatRestRestponse implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int statusCode = servletResponse.getStatus();
 
-        if (body instanceof RestResponse || body instanceof String) {
+        if (body instanceof RestResponse || body instanceof String || body instanceof Resource) {
             return body;
         }
 
-     
         RestResponse<Object> res = new RestResponse<>();
         res.setStatusCode(statusCode);
 
         if (statusCode >= 400) {
-            
-            return body; 
+
+            return body;
         } else {
-          
+
             res.setData(body);
             ApiMessage message = returnType.getMethodAnnotation(ApiMessage.class);
             res.setMessage(message != null ? message.value() : "Call Api Successfullty");
-            
+
         }
         return res;
     }
-    
+
 }

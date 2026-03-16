@@ -1,5 +1,6 @@
 package vn.hoangmelinh.jobhunter.controller;
 
+import java.lang.StackWalker.Option;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import vn.hoangmelinh.jobhunter.domain.Job;
 import vn.hoangmelinh.jobhunter.domain.Skill;
 import vn.hoangmelinh.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoangmelinh.jobhunter.domain.response.Job.ResCreateJobDTO;
+import vn.hoangmelinh.jobhunter.domain.response.Job.ResFetchJobDTO;
 import vn.hoangmelinh.jobhunter.service.JobService;
 import vn.hoangmelinh.jobhunter.util.annotation.ApiMessage;
 import vn.hoangmelinh.jobhunter.util.error.IdInvalidException;
@@ -42,10 +44,16 @@ public class JobController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.jobService.handleCreateJob(job));
     }
 
-    @PutMapping("/jobs/{id}")
+    @PutMapping("/jobs")
     @ApiMessage("Update a job")
-    public ResponseEntity<ResCreateJobDTO> updateJob(@PathVariable Long id, @RequestBody Job job) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.jobService.handleUpdateJob(id, job));
+    public ResponseEntity<ResCreateJobDTO> updateJob(@RequestBody Job job)
+            throws IdInvalidException {
+
+        Optional<Job> currentJob = this.jobService.findJobById(job.getId());
+        if (!currentJob.isPresent()) {
+            throw new IdInvalidException("Job not found");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(this.jobService.handleUpdateJob(job, currentJob.get()));
     }
 
     @GetMapping("jobs/{id}")
@@ -57,7 +65,39 @@ public class JobController {
             throw new IdInvalidException("Id " + id + "not found");
         }
 
-        return ResponseEntity.ok(this.jobService.findJobById(id));
+        Job currentJob = job.get();
+        ResFetchJobDTO res = new ResFetchJobDTO();
+        res.setId(currentJob.getId());
+        res.setName(currentJob.getName());
+        res.setLocation(currentJob.getLocation());
+        res.setSalary(currentJob.getSalary());
+        res.setQuantity(currentJob.getQuantity());
+        res.setLevel(currentJob.getLevel());
+        res.setDescription(currentJob.getDescription() != null ? currentJob.getDescription() : "");
+        res.setStartDate(currentJob.getStartDate());
+        res.setEndDate(currentJob.getEndDate());
+        res.setActive(currentJob.isActive());
+        res.setCreatedAt(currentJob.getCreatedAt());
+        res.setUpdatedAt(currentJob.getUpdatedAt());
+        res.setCreatedBy(currentJob.getCreatedBy());
+        res.setUpdatedBy(currentJob.getUpdatedBy());
+
+        if (currentJob.getSkills() != null) {
+            java.util.List<String> skills = currentJob.getSkills()
+                    .stream().map(Skill::getName)
+                    .collect(java.util.stream.Collectors.toList());
+            res.setSkills(skills);
+        }
+
+        if (currentJob.getCompany() != null) {
+            ResFetchJobDTO.CompanyJob companyJob = new ResFetchJobDTO.CompanyJob();
+            companyJob.setId(currentJob.getCompany().getId());
+            companyJob.setName(currentJob.getCompany().getName());
+            companyJob.setLogo(currentJob.getCompany().getLogo());
+            res.setCompany(companyJob);
+        }
+
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping("jobs")

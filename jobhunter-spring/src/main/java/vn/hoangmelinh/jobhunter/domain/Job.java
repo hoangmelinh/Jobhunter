@@ -36,6 +36,8 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String name;
+
     private String title;
 
     private String location;
@@ -72,6 +74,10 @@ public class Job {
     @JsonIgnoreProperties("jobs")
     @JoinTable(name = "job_skill", joinColumns = @JoinColumn(name = "job_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skill> skills;
+
+    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Resume> resumes;
 
     @PrePersist
     public void handleBeforeCreate() {

@@ -68,11 +68,11 @@ public class FileController {
     }
 
     @GetMapping("/files")
-    @vn.hoangmelinh.jobhunter.util.annotation.ApiMessage("Download a file")
+    @ApiMessage("Download a file")
     public ResponseEntity<Resource> download(
             @RequestParam(name = "fileName", required = false) String fileName,
             @RequestParam(name = "folder", required = false) String folder)
-            throws vn.hoangmelinh.jobhunter.util.error.StorageException, URISyntaxException, FileNotFoundException {
+            throws StorageException, URISyntaxException, FileNotFoundException {
         if (fileName == null || folder == null) {
             throw new StorageException("Missing required params : (fileName or folder) in query params.");
         }
