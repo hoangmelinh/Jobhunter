@@ -1,0 +1,12 @@
+/upload/
+/upload-docker/
+.vscode/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Config files with secrets
+application-secret.properties
+application-secret.yml
