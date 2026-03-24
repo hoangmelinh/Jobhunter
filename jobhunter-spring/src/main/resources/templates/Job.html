@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Recommendations</title>
+</head>
+
+<body
+    style="margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+    <div
+        style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e0e0e0;">
+
+        <div
+            style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            <h2 style="margin: 0; color: #333; font-size: 24px;">HoangMeLinh</h2>
+            <span style="color: #666; font-style: italic;">Ít nhưng mà chất</span>
+        </div>
+
+        <p style="font-size: 16px; color: #333; margin-bottom: 5px;">Hi <strong th:text="${name}">Hary
+                Pham</strong>,</p>
+        <p style="font-size: 15px; color: #555; margin-bottom: 25px;">One of these jobs may be your next one. Find out
+            today!</p>
+
+        <div th:each="job : ${jobs}" style="margin-bottom: 30px; padding-bottom: 10px;">
+            <a href="#" style="text-decoration: none;">
+                <h3 style="margin: 0 0 5px 0; color: #7b4fb6; font-size: 18px;" th:text="${job.name}">Web Developer
+                    (PHP, JavaScript)</h3>
+            </a>
+            <p th:text="${job.company != null ? job.company.name : 'N/A'}">Company Name</p>
+            <p style="margin: 5px 0; color: #666;"
+                th:text="${#numbers.formatDecimal(job.salary, 0, 'POINT', 0, 'COMMA')} + ' USD'">1,000 - 2,500 USD</p>
+
+            <div style="margin-top: 10px;">
+                <span th:each="tag : ${job.skills}" th:text="${tag.name}"
+                    style="display: inline-block; background-color: #f0f0f0; color: #555; padding: 4px 10px; border-radius: 4px; font-size: 13px; margin-right: 5px;">
+                    Skill Name
+                </span>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="#"
+                style="display: inline-block; background-color: #b30000; color: #ffffff; padding: 12px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                Xem thêm job tại Jobhunter;
+            </a>
+        </div>
+
+    </div>
+</body>
+
+</html>
