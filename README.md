@@ -2,7 +2,7 @@
 
 JobHunter is a comprehensive recruitment platform consisting of a **React** frontend and a **Spring Boot** backend. The system provides seamless recruitment workflows such as job postings, company catalogs, candidate resumes management, and role-based access control.
 
-## 📂 Project Structure
+## Project Structure
 
 This monorepo contains the following core components:
 
@@ -12,7 +12,7 @@ This monorepo contains the following core components:
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 - **Authentication & Authorization**: Stateless JWT authentication, Refresh Tokens via HTTP-only cookies, and dynamic Role-Based Access Control (RBAC).
 - **Core Modules**: Full CRUD operations for Users, Companies, Jobs, Skills, and Resumes.
@@ -22,7 +22,7 @@ This monorepo contains the following core components:
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 You can run this project either using **Docker (Recommended for easiest setup)** or **Locally for Development**.
 
